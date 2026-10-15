@@ -1,0 +1,18 @@
+{
+  "invoice": {
+    "keywords": ["invoice", "amount due", "payment terms", "bill to", "remit"],
+    "folder": "invoices"
+  },
+  "contract": {
+    "keywords": [],
+    "folder": "contracts"
+  },
+  "report": {
+    "keywords": ["summary", "quarterly", "findings", "report", "analysis"],
+    "folder": "reports"
+  },
+  "other": {
+    "keywords": [],
+    "folder": "other"
+  }
+}

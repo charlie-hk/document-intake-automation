@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Intake Automation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1>Document Intake Automation</h1>
+        <p class="subtitle">Document intake &rarr; classify &rarr; dedupe &rarr; file &rarr; log</p>
+      </div>
+      <div class="header-actions">
+        <form method="post" action="{{ url_for('run_pipeline') }}">
+          <button type="submit" class="btn btn-primary">Run Pipeline</button>
+        </form>
+        <form method="post" action="{{ url_for('reset_demo') }}">
+          <button type="submit" class="btn btn-ghost">Reset Demo</button>
+        </form>
+      </div>
+    </header>
+
+    <div class="notice">
+      <span class="notice-tag">Known open items</span>
+      <p>{{ notice }}</p>
+    </div>
+
+    <section class="stats">
+      <div class="stat-card">
+        <span class="stat-value">{{ inbox_count }}</span>
+        <span class="stat-label">waiting in inbox</span>
+      </div>
+      {% for folder, count in processed_counts.items() %}
+      <div class="stat-card">
+        <span class="stat-value">{{ count }}</span>
+        <span class="stat-label">filed &middot; {{ folder }}</span>
+      </div>
+      {% endfor %}
+    </section>
+
+    {% if last_results is not none %}
+    <section class="panel">
+      <h2>Last run</h2>
+      {% if last_results|length == 0 %}
+        <p class="empty">Inbox was empty &mdash; nothing to process.</p>
+      {% else %}
+      <table>
+        <thead>
+          <tr><th>File</th><th>Type</th><th>Destination</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for r in last_results %}
+          <tr>
+            <td>{{ r.file }}</td>
+            <td>{{ r.type }}</td>
+            <td>{{ r.destination }}</td>
+            <td><span class="pill pill-{{ r.status }}">{{ r.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <section class="panel">
+      <h2>Processing log <span class="muted">(most recent)</span></h2>
+      {% if log_rows|length == 0 %}
+        <p class="empty">No log entries yet. Press "Run Pipeline" to process what's in the inbox.</p>
+      {% else %}
+      <table>
+        <thead>
+          <tr><th>Timestamp (UTC)</th><th>Source</th><th>Type</th><th>Destination</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for row in log_rows %}
+          <tr>
+            <td class="mono">{{ row.timestamp_utc }}</td>
+            <td>{{ row.source_file }}</td>
+            <td>{{ row.doc_type }}</td>
+            <td class="mono">{{ row.destination }}</td>
+            <td><span class="pill pill-{{ row.status }}">{{ row.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </section>
+  </div>
+</body>
+</html>
