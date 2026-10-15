@@ -1,5 +1,7 @@
 # Document Intake Automation
 
+![Document Intake Automation](assets/cover.png)
+
 A lightweight document intake pipeline: it watches an inbox folder, classifies
 each incoming file by type (invoice, contract, report, other), renames it
 according to a fixed naming convention, files it into the right processed
